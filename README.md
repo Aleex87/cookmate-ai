@@ -49,7 +49,7 @@ OPENROUTER_API_KEY= ... personal key
 
 then:
 uv sync
-I have installed the same dependences of the cours icnliding python 3.13
+I have installed the same dependences of the course including python 3.13 This installs all dependencies and makes the `cookmate` package importable from anywhere in the project.
 
 ---
 
