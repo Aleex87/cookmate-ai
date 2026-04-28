@@ -133,3 +133,57 @@ config.py → environment loading and shared configuration
 
 test_api.py → basic API tests  
 
+
+
+
+_______________________________________________________________________________________________
+## Data Preprocessing
+
+We built a preprocessing pipeline to transform a large raw dataset into a clean and usable dataset for the RAG system.
+
+### Steps performed
+
+1. **Dataset loading**
+   - Source: RecipeNLG dataset (Kaggle)
+   - Loaded a subset for exploration
+
+2. **Column selection**
+   - Kept: `title`, `directions`, `NER`, `genre`
+   - Dropped irrelevant columns
+
+3. **Column renaming**
+   - `directions` → `instructions`
+   - `NER` → `ingredients`
+
+4. **Genre filtering**
+   - Removed: `drinks`, `fastfood`, `fusion`
+
+5. **Data conversion**
+   - Converted string fields to Python lists using `ast.literal_eval`
+
+6. **Ingredient-based filtering**
+   - Applied keyword-based filtering to keep relevant (European-style) recipes
+
+7. **Full dataset processing**
+   - Applied preprocessing to the entire dataset using chunked reading
+
+8. **Final dataset creation**
+   - Built structured JSON with:
+     - id
+     - title
+     - ingredients
+     - instructions
+     - text (combined field for embeddings)
+
+### Output
+
+Final dataset stored at:
+`data/processed/recipes_clean.json`
+
+Dataset size:
+- ~2870 recipes
+
+Note:
+- Raw dataset is not included in the repository (`data/raw/` is ignored)
+- Preprocessing is reproducible via the notebook
+- The dataset is optimized for embedding and retrieval (RAG pipeline)
