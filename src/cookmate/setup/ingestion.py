@@ -1,50 +1,50 @@
-import json 
+import json
+from sentence_transformers import SentenceTransformer
 import lancedb
-from dotenv import load_dotenv
-from lancedb.embeddings import get_registry
-from lancedb.pydantic import LanceModel, Vector
+
 from src.cookmate.utils.config import PROCESSED_DATA_DIR, DB_DIR
 
-load_dotenv()
 
-embedding_model = get_registry().get("cohere").create(
-    name="embed-multilingual-v3.0"
+# load data
+with open(PROCESSED_DATA_DIR / "recipes_clean.json", encoding="utf-8") as f:
+    data = json.load(f)
+
+
+# model (locale)
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+
+# prepare
+texts = [r["text"] for r in data]
+ids = [r["id"] for r in data]
+
+
+# embeddings (batch)
+embeddings = model.encode(
+    texts,
+    batch_size=32,
+    show_progress_bar=True
 )
 
-class RecipeModel(LanceModel):
-    id: str
-    title: str 
-    ingredients: str
-    instructions: str
-    text: str = embedding_model.SourceField()
-    vector: Vector(embedding_model.ndims()) = embedding_model.VectorField()  #type ignore
 
-# Load jason
-with open(PROCESSED_DATA_DIR / "recipes_clean.json") as f:
-    recipes = json.load(f)
-
+# create records
 records = []
+for i in range(len(data)):
+    records.append({
+        "id": ids[i],
+        "text": texts[i],
+        "vector": embeddings[i].tolist()
+    })
 
-for recipe in recipes:
-    records.append(
-        {
-            "id": recipe["id"],
-            "title": recipe["title"],
-            "ingredients": ", ".join(recipe["ingredients"]),
-            "instructions": " ".join(recipe["instructions"]),
-            "text": recipe["text"],
-        }
-    )
 
+# DB
 DB_DIR.mkdir(parents=True, exist_ok=True)
+db = lancedb.connect(DB_DIR)
 
-vector_db = lancedb.connect(DB_DIR)
-
-table = vector_db.create_table(
-        "recipes",
-        schema=RecipeModel,
-        data=records,
-        mode="overwrite",
+table = db.create_table(
+    "recipes",
+    data=records,
+    mode="overwrite"
 )
 
-print(f"Create table with {table.count_rows()} recipes")
+print("Rows:", table.count_rows())
