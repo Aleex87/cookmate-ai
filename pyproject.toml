@@ -1,0 +1,19 @@
+[project]
+name = "cookmate-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cohere>=6.1.0",
+    "fastapi>=0.136.1",
+    "ipykernel>=7.2.0",
+    "lancedb>=0.30.2",
+    "mlflow>=3.11.1",
+    "openai>=2.32.0",
+    "pandas>=2.3.3",
+    "pydantic-ai>=0.8.1",
+    "python-dotenv>=1.2.2",
+    "sentence-transformers>=5.4.1",
+    "uvicorn>=0.46.0",
+]
