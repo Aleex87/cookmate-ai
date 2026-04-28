@@ -101,6 +101,17 @@ data_models.py → request/response models + LanceDB schema
 constants.py → paths, model names, configuration  
 middleware.py → logging and MLflow tracing
 
+### Running the backend
+
+Start the FastAPI server locally:
+
+```bash
+uv run uvicorn cookmate.backend.api:app --reload
+```
+
+The API will be available at `http://localhost:8000`. Interactive docs 
+are at `http://localhost:8000/docs`.
+
 ---
 
 #### frontend/
