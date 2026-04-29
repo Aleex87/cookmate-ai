@@ -198,3 +198,76 @@ Note:
 - Raw dataset is not included in the repository (`data/raw/` is ignored)
 - Preprocessing is reproducible via the notebook
 - The dataset is optimized for embedding and retrieval (RAG pipeline)
+
+# Rag 
+## Overview
+
+This project implements a full RAG pipeline:
+- data preprocessing
+- vector database creation
+- semantic retrieval
+- LLM-based response generation
+
+---
+
+## Embeddings
+
+Initial approach:
+- Cohere embeddings
+- Not scalable due to API rate limits
+
+### Cohere embedding attempt (running)
+![Cohere Running](docs/problem_embedding_rate_limit.jpg)
+
+### Cohere embedding failure due to rate limits
+![Cohere Error](docs/embedding_faild.jpg)
+
+
+Final approach:
+- Local embeddings with SentenceTransformer (`all-MiniLM-L6-v2`)
+- Faster and stable ingestion
+
+---
+
+## Vector Database
+
+- Technology: LanceDB
+- Path: `/db/recipes.lance`
+- Stores embeddings for semantic search
+
+---
+
+## Retrieval
+
+- Query is converted into an embedding
+- Similar recipes are retrieved via vector similarity
+
+---
+
+## Generation
+
+- LLM via OpenRouter
+- Combines:
+  - user query
+  - retrieved recipes
+
+---
+
+## Architecture
+
+User Query  
+→ Embedding  
+→ Vector DB (LanceDB)  
+→ Retrieved Recipes  
+→ LLM (OpenRouter)  
+→ Response  
+
+---
+
+## Notes
+
+During development, we evaluated different embedding solutions.  
+We initially attempted to use Cohere embeddings but encountered rate limits during ingestion.
+
+To address this, we switched to a local embedding model (SentenceTransformer), following best practices for scalability. AI-assisted tools were used to learn and explore this alternative solutions.
+
