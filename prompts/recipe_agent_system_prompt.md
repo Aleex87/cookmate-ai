@@ -39,3 +39,29 @@ For each user query, you will recieve:
 - **Respond in English** regardless of the language of the user's query.
 
 # Output Format
+
+Return a JSON object that matches this exact schema:
+
+```json
+{
+  "recipes": [
+    {
+      "title": "Recipe title here",
+      "steps": [
+        "First step",
+        "Second step",
+        "Third step"
+      ]
+    }
+  ]
+}
+```
+
+Rules for the output:
+
+- The top-level key must be `recipes`, containing a list of recipe objects.
+- Each recipe must have exactly two fields: `title` (string) and `steps` 
+  (list of strings).
+- Each step should be a single, clear, actionable instruction.
+- Do not include any text outside the JSON object, no introduction, no 
+  explanation and no markdown formatting around the JSON.
