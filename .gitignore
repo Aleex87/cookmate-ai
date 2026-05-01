@@ -207,10 +207,11 @@ marimo/_lsp/
 __marimo__/
 # Data
 data/raw/
-data/processed/
+data/processed/*
+!data/processed/recipes_clean.json
 
 # Vector DB
-db/
+db
 
 # Environment
 .env
