@@ -148,6 +148,22 @@ test_api.py → basic API tests
 
 
 _______________________________________________________________________________________________
+## How to run section:
+
+### MLFlow:
+The prompt can be registered in MLflow by running from the root project:
+
+`uv run python src/cookmate/monitoring/mlflow_prompts.py`
+
+To open the MLflow UI locally, run:
+
+`uv run mlflow ui`
+
+Then open:
+http://localhost:5000
+
+
+
 ## Data Preprocessing
 
 We built a preprocessing pipeline to transform a large raw dataset into a clean and usable dataset for the RAG system.
@@ -270,4 +286,12 @@ During development, we evaluated different embedding solutions.
 We initially attempted to use Cohere embeddings but encountered rate limits during ingestion.
 
 To address this, we switched to a local embedding model (SentenceTransformer), following best practices for scalability. AI-assisted tools were used to learn and explore this alternative solutions.
+
+
+## MLflow prompt versioning
+
+This project uses MLflow to version and track prompts used by the recipe agent.
+The main recipe agent prompt is stored in:
+prompts/recipe_agent_system_prompt.md
+MLflow runs locally on port 5000 .
 
