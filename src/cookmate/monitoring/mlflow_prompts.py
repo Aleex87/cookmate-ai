@@ -4,10 +4,12 @@ from cookmate.utils.config import BASE_DIR
 
 PROMPT_PATH= BASE_DIR / "prompts" / "recipe_agent_system_prompt.md"
 
+# trasform the file.md in string
 def read_prompt(prompt_path : Path) -> str:
     "Read a prompt file and return its content as a string"
     return prompt_path.read_text(encoding="utf-8")
 
+#
 def register_recipe_agent_prompt() -> None:
     "Register the recipe agent system prompt in MLflow"
     prompt_template= read_prompt(PROMPT_PATH)
@@ -29,4 +31,3 @@ def register_recipe_agent_prompt() -> None:
 
 if __name__ == "__main__":
     register_recipe_agent_prompt()
-    
