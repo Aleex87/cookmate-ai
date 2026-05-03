@@ -11,8 +11,19 @@ def page():
                 """)
     input_ingrediens = st.text_input(label="Put in ingrediens here")
 
+    if st.button("Send in") and input_ingrediens == "":
+        st.write("you did not put anything in?")
     
+    res_response = httpx.post(f"")
+    data_res = res_response.json()
+
+    st.markdown(input_ingrediens)
+    st.markdown(data_res.get())
+    st.markdown(data_res.get())
 
 def export():
     pass 
 
+
+if __name__ == "__main__":
+    page()
