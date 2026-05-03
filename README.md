@@ -294,4 +294,8 @@ This project uses MLflow to version and track prompts used by the recipe agent.
 The main recipe agent prompt is stored in:
 prompts/recipe_agent_system_prompt.md
 MLflow runs locally on port 5000 .
+If you have in use the port 5000 you can still run mlflow on another port for example 5001 using :
+`uv run mlflow ui --port 5001`
+then open :
+`http://localhost:5001`
 
