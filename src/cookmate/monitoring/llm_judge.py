@@ -1,10 +1,12 @@
 import json
+import os
 from pathlib import Path
-
+from dotenv import load_dotenv
 import mlflow
 from mlflow.genai import evaluate
 from mlflow.genai.scorers import Correctness
 
+load_dotenv()
 
 DATASET_PATH = Path(__file__).parent / "evaluation_dataset.json"
 
@@ -26,6 +28,12 @@ def fake_agent(ingredients: list[str]) -> str:
 
 
 def run_judge():
+    import os
+    print("OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
+    print("OPENAI_API_BASE:", os.getenv("OPENAI_API_BASE"))
+
+    
+    
     dataset = load_dataset()
 
     # Prepare evaluation format
@@ -55,7 +63,7 @@ def run_judge():
     with mlflow.start_run():
         results = evaluate(
             data=eval_data,
-            scorers=[Correctness()],
+            scorers=[Correctness(model="openai/gpt-3.5-turbo")],
         )
 
         print("Evaluation results:")
