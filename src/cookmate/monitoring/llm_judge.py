@@ -28,12 +28,7 @@ def fake_agent(ingredients: list[str]) -> str:
 
 
 def run_judge():
-    import os
-    print("OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
-    print("OPENAI_API_BASE:", os.getenv("OPENAI_API_BASE"))
-
-    
-    
+     
     dataset = load_dataset()
 
     # Prepare evaluation format
