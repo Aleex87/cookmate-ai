@@ -1,0 +1,26 @@
+[
+  {
+    "inputs": {
+      "ingredients": ["eggs", "pasta"]
+    },
+    "expectations": {
+      "description": "The system should suggest recipes that include eggs and pasta."
+    }
+  },
+  {
+    "inputs": {
+      "ingredients": ["potatoes"]
+    },
+    "expectations": {
+      "description": "The system should suggest recipes that use potatoes as a main ingredient."
+    }
+  },
+  {
+    "inputs": {
+      "ingredients": ["chocolate"]
+    },
+    "expectations": {
+      "description": "The system should suggest dessert recipes using chocolate."
+    }
+  }
+]
