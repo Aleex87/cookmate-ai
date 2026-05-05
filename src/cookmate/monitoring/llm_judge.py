@@ -1,12 +1,37 @@
 import json
-import os
-from pathlib import Path
+
 from dotenv import load_dotenv
+import lancedb
 import mlflow
 from mlflow.genai import evaluate
-from mlflow.genai.scorers import Correctness
+from mlflow.genai.scorers import Completeness, Correctness, Fluency
+from sentence_transformers import SentenceTransformer
+
+from cookmate.utils.config import DB_DIR, EVALUATION_DATASET_PATH, RECIPES_JSON_PATH
+
 
 load_dotenv()
+
+# load evalutation_dataset.json 
+def load_evaluation_dataset() -> list[dict]:
+    "Load evaluation dataset from JSON file."
+    with open(EVALUATION_DATASET_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+# load recipes_clean.json   
+def load_recipe_lookup() -> dict:
+    "Load clean recipes adn create a lookup dictionary by recipes id"
+    with open(RECIPES_JSON_PATH, "r", encoding="utf-8") as f:
+        recipes = json.load(f)
+    
+    return {recipe["id"]: recipe for recipe in recipes}
+
+
+
+
+
+
+
 
 DATASET_PATH = Path(__file__).parent / "evaluation_dataset.json"
 
