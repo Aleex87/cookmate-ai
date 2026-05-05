@@ -24,10 +24,10 @@ def page():
 
     st.markdown(input_ingrediens)
     st.markdown(data_res.get("ansver"))
-    
-    st.download_button(lable="Download to PDF", data=PDF ) #steamlit docs on how to use download button
 
+    st.download_button(label="Download to PDF", data=str, file_name="json.pdf") 
 
+ #st.download_button(label="Download to PDF", data=str, file_name="json.pdf") #steamlit docs on how to use download button i8n combo wioth LLM  
 
 if __name__ == "__main__":
     page()
