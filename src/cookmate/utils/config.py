@@ -10,3 +10,6 @@ DB_DIR = BASE_DIR / "db"
 
 # specific file
 RAW_DATA_FILE = RAW_DATA_DIR / "3A2M.csv"
+
+EVALUATION_DATASET_PATH = BASE_DIR / "src" / "cookmate" / "monitoring" / "evaluation_dataset.json"
+RECIPES_JSON_PATH = PROCESSED_DATA_DIR / "recipes_clean.json"
