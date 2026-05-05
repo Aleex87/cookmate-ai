@@ -17,18 +17,25 @@ def load_dataset():
         return json.load(f)
 
 
-def fake_agent(ingredients: list[str]) -> str:
+def fake_agent(ingredients: list[str]) -> dict:
     """
     Temporary fake agent.
 
-    This simulates a response from the real system.
-    Later we will replace this with the real backend agent.
+    This simulates the expected structure of the future recipe agent.
     """
-    return f"Suggested recipes using: {', '.join(ingredients)}"
-
+    return {
+        "recipes": [
+            {
+                "title": "Simple pasta with eggs",
+                "ingredients": ingredients,
+                "description": "A simple recipe idea based on the provided ingredients.",
+            }
+        ]
+    }
 
 def run_judge():
      
+
     dataset = load_dataset()
 
     # Prepare evaluation format
@@ -54,12 +61,15 @@ def run_judge():
 
     # Start MLflow experiment
     mlflow.set_experiment("cookmate-llm-judge")
+    llm_judge = "openrouter:/openai/gpt-oss-20b:free"
 
     with mlflow.start_run():
         results = evaluate(
             data=eval_data,
-            scorers=[Correctness(model="openai/gpt-3.5-turbo")],
-        )
+            scorers=[
+                Correctness(model=llm_judge),
+    ],
+)
 
         print("Evaluation results:")
         print(results)
