@@ -1,5 +1,10 @@
 import streamlit as st
 import httpx 
+import os 
+
+URL_FASTAPI = os.getenv("URL_FASTAPI", "http://localhost:8000")
+
+
 
 
 def page():
@@ -14,15 +19,14 @@ def page():
     if st.button("Send in") and input_ingrediens == "":
         st.write("you did not put anything in?")
     
-    res_response = httpx.post(f"")
+    res_response = httpx.post(f"{URL_FASTAPI}/src/cookmate", timeout=180, json={"promt": input_ingrediens})
     data_res = res_response.json()
 
     st.markdown(input_ingrediens)
-    st.markdown(data_res.get())
-    st.markdown(data_res.get())
+    st.markdown(data_res.get("ansver"))
+    
+    st.download_button(lable="Download to PDF", data=PDF ) #steamlit docs on how to use download button
 
-def export():
-    pass 
 
 
 if __name__ == "__main__":
