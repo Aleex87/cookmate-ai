@@ -12,3 +12,5 @@ def health():
 @app.post("/recipes", response_model=RecipeResponse)
 async def get_recipes(request: RecipeRequest) -> RecipeResponse:
     return await generate_recipes(request)
+
+
