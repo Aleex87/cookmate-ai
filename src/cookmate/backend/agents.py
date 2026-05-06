@@ -1,17 +1,17 @@
+from cookmate.utils.config import DB_DIR, OPENROUTER_BASE_URL, LLM_MODEL
 from dotenv import load_dotenv
 
 load_dotenv()
 
 import os
 
-from mlflow import load_prompt
+from mlflow.genai import load_prompt
 from sentence_transformers import SentenceTransformer
 import lancedb
 from pydantic_ai import Agent 
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-from cookmate.utils.config import DB_DIR, OPENROUTER_BASE_URL, LLM_MODEL
 from cookmate.backend.data_models import RecipeRequest, RecipeResponse
 
 _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -34,7 +34,7 @@ def load_recipe_agent_prompt(version: int = 1) -> str:
     Args: Version of the prompt to load from MLFlow.
     Returns: The prompt tamplate string.
     """
-    prompt = load_prompt(f"prompts:/recipe_agent_system_prompt/{version}")
+    prompt = load_prompt("recipe_agent_system_prompt")
 
     return prompt.template
 
