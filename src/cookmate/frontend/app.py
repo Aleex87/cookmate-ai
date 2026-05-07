@@ -25,11 +25,15 @@ def page():
        
     res_response = httpx.post(f"{URL_FASTAPI}/recipes", timeout=180, json={"ingredients": list_of_input})
     
-
     data_res = res_response.json()
+    recepies = data_res.get("recipes", []).json()
+    
+    for recipe in recepies:
+        st.subheader(recipe["title"]) 
 
-    st.markdown(input_ingrediens)
-    st.markdown(data_res.get("recepics"))
+        for step in recipe["steps"]:
+            st.write(step)
+   
 
     st.download_button(label="Download to PDF", data=str, file_name="json.pdf") 
 
