@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from cookmate.backend.agents import generate_recipes
-from cookmate.backend.data_models import RecipeRequest, RecipeResponse
+from backend.agents import generate_recipes
+from backend.data_models import RecipeRequest, RecipeResponse
 from fastapi import APIRouter
 
 
