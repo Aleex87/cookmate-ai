@@ -44,6 +44,7 @@ recipe_agent = Agent(
     model=_model,
     output_type=RecipeResponse,
     system_prompt=_system_prompt,
+    retries=3
 )
 
 
@@ -85,3 +86,4 @@ async def generate_recipes(request: RecipeRequest) -> RecipeResponse:
     query = ", ".join(request.ingredients)
     result = await recipe_agent.run(query)
     return result.output
+  

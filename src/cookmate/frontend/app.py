@@ -1,6 +1,7 @@
 import streamlit as st
 import httpx 
-import os 
+import os
+import json 
 
 
 URL_FASTAPI = os.getenv("URL_FASTAPI", "http://localhost:8000")
@@ -25,7 +26,14 @@ def page():
        
     res_response = httpx.post(f"{URL_FASTAPI}/recipes", timeout=180, json={"ingredients": list_of_input})
     
-    data_res = res_response.json()
+    print(res_response.status_code)
+    print(res_response.text)
+
+    if res_response.status_code != 200:
+        st.error(res_response.text)
+        st.stop()
+
+    data_res = json.loads(res_response.text)
     recepies = data_res.get("recipes", [])
     
     for recipe in recepies:
