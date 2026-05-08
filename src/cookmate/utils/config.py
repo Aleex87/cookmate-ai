@@ -1,4 +1,5 @@
 from pathlib import Path
+import mlflow
 
 BASE_DIR = Path(__file__).resolve().parents[3] #get_project_root()
 
@@ -13,3 +14,13 @@ RAW_DATA_FILE = RAW_DATA_DIR / "3A2M.csv"
 
 EVALUATION_DATASET_PATH = BASE_DIR / "src" / "cookmate" / "monitoring" / "evaluation_dataset.json"
 RECIPES_JSON_PATH = PROCESSED_DATA_DIR / "recipes_clean.json"
+# OpenRouter / LLM
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+LLM_MODEL = "openai/gpt-oss-20b:free"
+
+
+MLFLOW_DB_PATH = BASE_DIR / "mlflow.db"
+
+
+print(f"Connected to this mlflow: {MLFLOW_DB_PATH}")
+mlflow.set_tracking_uri(f"sqlite:///{MLFLOW_DB_PATH.as_posix()}") #proffesor copypaste from LLM
