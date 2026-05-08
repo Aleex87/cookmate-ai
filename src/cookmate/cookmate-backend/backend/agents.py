@@ -1,4 +1,4 @@
-from cookmate.utils.config import DB_DIR, OPENROUTER_BASE_URL, LLM_MODEL
+from utils.config import DB_DIR, OPENROUTER_BASE_URL, LLM_MODEL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,7 +16,9 @@ from backend.data_models import RecipeRequest, RecipeResponse
 
 _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 _db = lancedb.connect(DB_DIR)
-_table = _db.open_table("recipes")
+
+def get_recipe_table(): #LLM solution, lazy loading
+    return _db.open_table("recipes")
 
 _provider = OpenAIProvider(
     base_url=OPENROUTER_BASE_URL,
@@ -62,6 +64,7 @@ def retrieve_recipes(query: str, top_k: int = 3) -> str:
         A formatted string containing the retrieved recipes, ready for the agent.
     """
     query_vector = _embedding_model.encode(query).tolist()
+    _table = get_recipe_table()
     results = _table.search(query_vector).limit(top_k).to_list()
 
     lines = []
