@@ -38,12 +38,13 @@ def load_recipe_agent_prompt(version: int = 1) -> str:
 
     return prompt.template
 
-_system_prompt = load_recipe_agent_prompt(version=1)
+_system_prompt = load_recipe_agent_prompt(version=3)
 
 recipe_agent = Agent(
     model=_model,
     output_type=RecipeResponse,
     system_prompt=_system_prompt,
+    retries=3
 )
 
 
@@ -85,3 +86,4 @@ async def generate_recipes(request: RecipeRequest) -> RecipeResponse:
     query = ", ".join(request.ingredients)
     result = await recipe_agent.run(query)
     return result.output
+  
