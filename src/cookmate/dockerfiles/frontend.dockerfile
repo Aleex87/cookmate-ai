@@ -2,11 +2,11 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY cookmate-frontend frontend
+COPY cookmate-frontend cookmate-frontend
 
 RUN pip install --no-cache-dir uv
 
-WORKDIR /app/cookmate
+WORKDIR /app/cookmate/cookmate-frontend/frontend
 
 RUN uv sync --no-dev
 

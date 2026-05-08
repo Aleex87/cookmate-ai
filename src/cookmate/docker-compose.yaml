@@ -1,5 +1,7 @@
 services:
   backend:
+    volumes:
+     - ./mlflow.db:/app/mlflow.db 
     container_name: backend
     build:
       context: .
@@ -23,5 +25,3 @@ services:
     environment:
       - API_URL=http://backend:8000
 
-  volumes:
-     -./mlflow.db/app/mlflow.db #
