@@ -26,7 +26,7 @@ def page():
     res_response = httpx.post(f"{URL_FASTAPI}/recipes", timeout=180, json={"ingredients": list_of_input})
     
     data_res = res_response.json()
-    recepies = data_res.get("recipes", []).json()
+    recepies = data_res.get("recipes", [])
     
     for recipe in recepies:
         st.subheader(recipe["title"]) 

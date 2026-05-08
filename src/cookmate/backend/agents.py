@@ -38,7 +38,7 @@ def load_recipe_agent_prompt(version: int = 1) -> str:
 
     return prompt.template
 
-_system_prompt = load_recipe_agent_prompt(version=1)
+_system_prompt = load_recipe_agent_prompt(version=3)
 
 recipe_agent = Agent(
     model=_model,
