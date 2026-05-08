@@ -150,19 +150,37 @@ test_api.py → basic API tests
 _______________________________________________________________________________________________
 ## How to run section:
 
-### MLFlow:
-The prompt can be registered in MLflow by running from the root project:
+Requirements:
+Before running make sure that have all the necessary dependencies installed:
+`uv sync`
+
+The local vector database has been created:
+
+`uv run python src/cookmate/setup/ingestion.py`
+
+The prompt has been registered in MLflow:
 
 `uv run python src/cookmate/monitoring/mlflow_prompts.py`
 
-To open the MLflow UI locally, run:
+The .env file contains:
+
+OPENROUTER_API_KEY=your_openrouter_key
+
+### Run MLFlow:
+## In one terminal:
 
 `uv run mlflow ui`
+If your port 5000 is not avalible you can use other port with the followig comand:
+
+`uv run mlflow ui --host 127.0.0.1 --port Port Nummer`
 
 Then open:
 http://localhost:5000
 
+## In another terminal:
 
+From the root:
+uv run python src/cookmate/monitoring/llm_judge.py
 
 ## Data Preprocessing
 
@@ -288,14 +306,17 @@ We initially attempted to use Cohere embeddings but encountered rate limits duri
 To address this, we switched to a local embedding model (SentenceTransformer), following best practices for scalability. AI-assisted tools were used to learn and explore this alternative solutions.
 
 
-## MLflow prompt versioning
+## MLflow LLM Judge
 
-This project uses MLflow to version and track prompts used by the recipe agent.
-The main recipe agent prompt is stored in:
-prompts/recipe_agent_system_prompt.md
-MLflow runs locally on port 5000 .
-If you have in use the port 5000 you can still run mlflow on another port for example 5001 using :
-`uv run mlflow ui --port 5001`
-then open :
-`http://localhost:5001`
+This project uses MLflow to evaluate the retrieval part of the RAG pipeline.
 
+The current evaluation flow is:
+
+ingredients
+-> query embedding
+-> LanceDB retrieval
+-> recipe lookup from recipes_clean.json
+-> structured recipe output
+-> MLflow LLM judge
+
+The judge checks whether the retrieved recipes are relevant to the input ingredients and whether the output follows the expected recipe response structure.
