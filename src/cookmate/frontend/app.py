@@ -26,12 +26,6 @@ def page():
        
     res_response = httpx.post(f"{URL_FASTAPI}/recipes", timeout=180, json={"ingredients": list_of_input})
     
-    print(res_response.status_code)
-    print(res_response.text)
-
-    if res_response.status_code != 200:
-        st.error(res_response.text)
-        st.stop()
 
     data_res = json.loads(res_response.text)
     recepies = data_res.get("recipes", [])
@@ -43,9 +37,7 @@ def page():
             st.write(step)
    
 
-    st.download_button(label="Download to PDF", data=str, file_name="json.pdf") 
-
-    #st.download_button(label="Download to PDF", data=str, file_name="json.pdf") #steamlit docs on how to use download button i8n combo wioth LLM  
+    st.download_button(label="Download to PDF", data=str, file_name="json.pdf")  #steamlit docs on how to use download button i8n combo wioth LLM  
 
 if __name__ == "__main__":
     page()
