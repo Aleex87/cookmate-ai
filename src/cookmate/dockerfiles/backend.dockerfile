@@ -1,15 +1,18 @@
 FROM python:3.13-slim
 
-WORKDIR /app/cookmate
+WORKDIR /app
 
-COPY cookmate-backend cookmate-backend
-
-ENV PYTHONPATH=/app
 
 RUN pip install --no-cache-dir uv
 
-WORKDIR /app/cookmate/cookmate-backend/backend
+COPY  pyproject.toml .
+COPY  uv.lock .
 
-RUN uv sync --no-dev
+COPY src ./src
 
-CMD [ "uv", "run", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000" ]
+
+WORKDIR /app/src/cookmate/cookmate-backend/backend
+
+RUN uv sync --package coockmate-backend --no-dev
+
+CMD [ "uv", "run", "uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000" ]

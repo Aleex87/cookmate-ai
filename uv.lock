@@ -585,6 +585,7 @@ dependencies = [
     { name = "mlflow" },
     { name = "openai" },
     { name = "pandas" },
+    { name = "utils" },
 ]
 
 [package.metadata]
@@ -596,6 +597,7 @@ requires-dist = [
     { name = "mlflow", specifier = ">=3.11.1" },
     { name = "openai", specifier = ">=2.32.0" },
     { name = "pandas", specifier = ">=2.3.3" },
+    { name = "utils", editable = "src/cookmate/utils" },
 ]
 
 [[package]]

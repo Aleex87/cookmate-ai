@@ -1,13 +1,19 @@
 FROM python:3.13-slim
 
-WORKDIR /app/cookmate
+WORKDIR /app
 
-COPY cookmate-frontend cookmate-frontend
 
 RUN pip install --no-cache-dir uv
 
-WORKDIR /app/cookmate/cookmate-frontend/frontend
+COPY  pyproject.toml .
+COPY  uv.lock .
 
-RUN uv sync --no-dev
+COPY src ./src
 
-CMD [ "uv", "run", "steamlit", "run", "app.py", "--server.port", "8501", "--server.adress", "0.0.0.0" ]
+RUN uv sync --package coockmate-frontend --no-dev
+
+WORKDIR /app/src/cookmate/cookmate-frontend/frontend
+
+
+
+CMD [ "uv", "run", "streamlit", "run", "app.py", "--server.port", "8501", "--server.addfress", "0.0.0.0" ]
