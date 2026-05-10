@@ -11,8 +11,8 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-backend = { workspace = true }
-frontend = { workspace = true }
+cookmate-backend = { workspace = true }
+cookmate-frontend = { workspace = true }
 utils = { workspace = true }
 
 [tool.uv.workspace]

@@ -2,6 +2,7 @@ services:
   backend:
     volumes:
      - ./mlflow.db:/app/mlflow.db 
+     - ./db:/app/db
     container_name: backend
     build:
       context: .

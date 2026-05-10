@@ -10,10 +10,10 @@ COPY  uv.lock .
 
 COPY src ./src
 
-RUN uv sync --package coockmate-frontend --no-dev
+RUN uv sync --package cookmate-frontend --no-dev
 
 WORKDIR /app/src/cookmate/cookmate-frontend/frontend
 
 
 
-CMD [ "uv", "run", "streamlit", "run", "app.py", "--server.port", "8501", "--server.addfress", "0.0.0.0" ]
+CMD [ "uv", "run", "streamlit", "run", "app.py", "--server.port", "8501", "--server.address", "0.0.0.0" ]

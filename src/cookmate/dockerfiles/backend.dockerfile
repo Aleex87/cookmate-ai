@@ -10,9 +10,9 @@ COPY  uv.lock .
 
 COPY src ./src
 
+RUN uv sync --package cookmate-backend --no-dev
 
 WORKDIR /app/src/cookmate/cookmate-backend/backend
 
-RUN uv sync --package coockmate-backend --no-dev
 
-CMD [ "uv", "run", "uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000" ]
+CMD [ "uv", "run", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000" ]

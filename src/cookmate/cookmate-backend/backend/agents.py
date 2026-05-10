@@ -30,6 +30,10 @@ _model = OpenAIModel(
     provider=_provider,
 )
 
+print("db dir=", DB_DIR)
+print("db dir=", DB_DIR.exists())
+print("db dir=", list(DB_DIR.iterdir()))
+
 def load_recipe_agent_prompt(version: int = 1) -> str:
     """
     Load the recipe agent system prompt from MLFlow. 
