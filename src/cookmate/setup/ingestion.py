@@ -2,7 +2,7 @@ import json
 from sentence_transformers import SentenceTransformer
 import lancedb
 
-from src.cookmate.utils.config import PROCESSED_DATA_DIR, DB_DIR
+from utils.config import PROCESSED_DATA_DIR, DB_DIR
 
 
 # load data
@@ -10,7 +10,7 @@ with open(PROCESSED_DATA_DIR / "recipes_clean.json", encoding="utf-8") as f:
     data = json.load(f)
 
 
-# model (locale)
+# model (local)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
