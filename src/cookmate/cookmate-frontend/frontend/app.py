@@ -4,7 +4,7 @@ import os
 import json 
 
 
-URL_FASTAPI = os.getenv("URL_FASTAPI", "http://localhost:8000")
+URL_FASTAPI = os.getenv("API_URL", "http://backend:8000")
 
 
 

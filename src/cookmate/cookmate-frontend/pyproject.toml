@@ -1,0 +1,17 @@
+[project]
+name="cookmate-frontend"
+version="0.1.0"
+description = "frontend for cookmate"
+requires-python = ">=3.13"
+dependencies = ["streamlit", "httpx", "utils"]
+
+
+[tool.uv.sources]
+utils = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages =  ["frontend"]

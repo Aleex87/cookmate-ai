@@ -1,7 +1,7 @@
 from pathlib import Path
 import mlflow
 
-BASE_DIR = Path(__file__).resolve().parents[3] #get_project_root()
+BASE_DIR = Path(__file__).resolve().parents[4] #get_project_root()
 
 DATA_DIR = BASE_DIR / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"

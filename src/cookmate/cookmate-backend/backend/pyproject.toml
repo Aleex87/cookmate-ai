@@ -1,7 +1,0 @@
-[project]
-name="backend"
-version="0.1.0"
-description = "backend for cookmate"
-requires-python = ">=3.13"
-dependencies = ["lancedb", "pydantic-ai", "fastapi", "uvicorn", "pydantic-ai>=0.8.1",
-    "python-dotenv>=1.2.2",  "sentence-transformers>=5.4.1"]

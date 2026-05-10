@@ -1,0 +1,28 @@
+services:
+  backend:
+    volumes:
+     - ./mlflow.db:/app/mlflow.db 
+     - ./db:/app/db
+    container_name: backend
+    build:
+      context: .
+      dockerfile: src/cookmate/dockerfiles/backend.dockerfile
+    env_file:
+      - .env
+    image: backend:v1
+    ports:
+      - "8000:8000"
+  
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: src/cookmate/dockerfiles/frontend.dockerfile
+    ports:
+      - "8501:8501"
+    image: frontend:v1
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:8000
+
