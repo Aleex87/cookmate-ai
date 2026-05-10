@@ -14,8 +14,13 @@ dependencies = [
 cookmate-backend = { workspace = true }
 cookmate-frontend = { workspace = true }
 utils = { workspace = true }
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.uv.workspace]
 members = ["src/cookmate/cookmate-frontend", "src/cookmate/cookmate-backend", "src/cookmate/utils"]
-
 

@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir uv
 COPY pyproject.toml .
 COPY uv.lock .
 
-COPY data ./data
+COPY data/processed/recipes_clean.json ./data/processed/recipes_clean.json
 COPY prompts ./prompts
 COPY mlflow.db ./mlflow.db
 COPY src ./src

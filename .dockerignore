@@ -20,3 +20,8 @@ build
 *.egg-info
 
 node_modules
+
+data/*
+!data/processed/
+data/processed/*
+!data/processed/recipes_clean.json
