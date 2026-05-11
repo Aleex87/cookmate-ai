@@ -12,7 +12,8 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-from backend.data_models import RecipeRequest, RecipeResponse
+#from backend.data_models import RecipeRequest, RecipeResponse
+from backend.data_models import Recipe, RecipeRequest, RecipeResponse
 
 _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 _db = lancedb.connect(DB_DIR)
@@ -82,8 +83,9 @@ async def generate_recipes(request: RecipeRequest) -> RecipeResponse:
     Generate recipe suggestions based on the user's available ingredients.
 
     The backend first retrieves candidate recipes from LanceDB and then sends
-    both the user ingredients and the retrieved recipes to the agent. This makes
-    the model output more stable and easier to validate.
+    both the user ingredients and the retrieved recipes to the agent. If the
+    model fails to return a valid structured response, the backend falls back
+    to the retrieved recipes so the API remains stable.
     """
     query = ", ".join(request.ingredients)
     retrieved_recipes = retrieve_recipes(query=query, top_k=3)
@@ -105,5 +107,31 @@ Do not return markdown.
 Do not return explanations outside the structured response.
 """
 
-    result = await recipe_agent.run(user_prompt)
-    return result.output
+    try:
+        result = await recipe_agent.run(user_prompt)
+        return result.output
+    except Exception:
+        fallback_recipes = []
+
+        for line in retrieved_recipes.splitlines():
+            if not line.strip():
+                continue
+
+            if "]" in line:
+                recipe_text = line.split("]", 1)[1].strip()
+            else:
+                recipe_text = line.strip()
+
+            if ")" in recipe_text:
+                recipe_text = recipe_text.split(")", 1)[1].strip()
+
+            title = recipe_text.split(".")[0].strip()
+
+            fallback_recipes.append(
+                Recipe(
+                    title=title[:80] if title else "Retrieved recipe",
+                    steps=[recipe_text],
+                )
+            )
+
+        return RecipeResponse(recipes=fallback_recipes[:3])
