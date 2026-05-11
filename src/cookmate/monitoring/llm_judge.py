@@ -8,8 +8,8 @@ from mlflow.genai import evaluate
 from mlflow.genai.scorers import Completeness, Correctness, Fluency
 from sentence_transformers import SentenceTransformer
 
-from cookmate.utils.config import DB_DIR, EVALUATION_DATASET_PATH, RECIPES_JSON_PATH
-
+#from cookmate.utils.config import DB_DIR, EVALUATION_DATASET_PATH, RECIPES_JSON_PATH
+from utils.config import DB_DIR, EVALUATION_DATASET_PATH, RECIPES_JSON_PATH
 
 load_dotenv()
 
