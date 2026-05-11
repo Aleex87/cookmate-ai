@@ -30,15 +30,15 @@ _model = OpenAIModel(
     provider=_provider,
 )
 
-print("db dir=", DB_DIR)
-print("db dir=", DB_DIR.exists())
-print("db dir=", list(DB_DIR.iterdir()))
+# print("db dir=", DB_DIR)
+# print("db dir=", DB_DIR.exists())
+# print("db dir=", list(DB_DIR.iterdir()))
 
 def load_recipe_agent_prompt(version: int = 1) -> str:
     """
     Load the recipe agent system prompt from MLFlow. 
     Args: Version of the prompt to load from MLFlow.
-    Returns: The prompt tamplate string.
+    Returns: The prompt template string.
     """
     prompt = load_prompt("recipe_agent_system_prompt")
 
@@ -81,16 +81,29 @@ async def generate_recipes(request: RecipeRequest) -> RecipeResponse:
     """
     Generate recipe suggestions based on the user's available ingredients.
 
-    The agent will automatically call the retrieve_recipes tool when needed
-    to look up recipes from the vector database.
-
-    Args:
-        request: The user's ingredient list wrapped in a RecipeRequest.
-
-    Returns:
-        A RecipeResponse withh recommended recipes.
+    The backend first retrieves candidate recipes from LanceDB and then sends
+    both the user ingredients and the retrieved recipes to the agent. This makes
+    the model output more stable and easier to validate.
     """
     query = ", ".join(request.ingredients)
-    result = await recipe_agent.run(query)
+    retrieved_recipes = retrieve_recipes(query=query, top_k=3)
+
+    user_prompt = f"""
+User ingredients:
+{query}
+
+Retrieved recipes:
+{retrieved_recipes}
+
+Return exactly 3 recipes.
+Each recipe must have:
+- title: a short recipe title
+- steps: a list of short cooking instructions
+
+Use the retrieved recipes as the source of truth.
+Do not return markdown.
+Do not return explanations outside the structured response.
+"""
+
+    result = await recipe_agent.run(user_prompt)
     return result.output
-  

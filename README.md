@@ -152,8 +152,9 @@ ________________________________________________________________________________
 
 Requirements:
 Before running make sure that have all the necessary dependencies installed:
-`uv sync`
+`uv sync --all-packages`
 
+## For Developers 
 The local vector database has been created:
 
 `uv run python src/cookmate/setup/ingestion.py`
@@ -181,6 +182,40 @@ http://localhost:5000
 
 From the root:
 uv run python src/cookmate/monitoring/llm_judge.py
+
+
+
+## Run the FastAPI backend locally
+
+`uv run --package cookmate-backend uvicorn backend.api:app --reload --host 127.0.0.1 --port 8000`
+
+http://localhost:8000/docs
+
+## Run the Streamlit frontend locally
+
+`API_URL=http://localhost:8000 uv run --package cookmate-frontend streamlit run src/cookmate/cookmate-frontend/frontend/app.py`
+
+http://localhost:8501
+
+## Docker setup 
+
+Build and start both services frontend and backend:
+`docker compose up --build`
+
+For start the backend and the frontend together:
+`docker compose up frontend backend`
+
+Frontend: http://localhost:8501
+Backend API docs: http://localhost:8000/docs
+Health check: http://localhost:8000/health
+
+
+
+
+
+
+
+
 
 ## Data Preprocessing
 
