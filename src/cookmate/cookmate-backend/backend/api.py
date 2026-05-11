@@ -1,17 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from backend.agents import generate_recipes
 from backend.data_models import RecipeRequest, RecipeResponse
-from fastapi import APIRouter
-
 
 
 app = FastAPI(title="Cookmate AI")
+
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
+
 @app.post("/recipes", response_model=RecipeResponse)
 async def get_recipes(request: RecipeRequest) -> RecipeResponse:
-    return await generate_recipes(request)
+    try:
+        return await generate_recipes(request)
+    except Exception as error:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Recipe generation failed: {type(error).__name__}",
+        ) from error
