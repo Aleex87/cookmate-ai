@@ -1,6 +1,6 @@
 from pathlib import Path
 from mlflow.genai import register_prompt
-from cookmate.utils.config import BASE_DIR
+from utils.config import BASE_DIR
 
 PROMPT_PATH= BASE_DIR / "prompts" / "recipe_agent_system_prompt.md"
 

@@ -24,3 +24,6 @@ explicit = true
 [tool.uv.workspace]
 members = ["src/cookmate/cookmate-frontend", "src/cookmate/cookmate-backend", "src/cookmate/utils"]
 
+
+[tool.hatch.build.targets.wheel]
+packages =  ["src/cookmate"]
