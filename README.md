@@ -150,6 +150,11 @@ test_api.py → basic API tests
 _______________________________________________________________________________________________
 ## How to run section:
 
+# Link:
+
+https://cookmate-frontend.agreeablepebble-5d90aa14.italynorth.azurecontainerapps.io/
+
+
 Requirements:
 Before running make sure that have all the necessary dependencies installed:
 `uv sync --all-packages`
