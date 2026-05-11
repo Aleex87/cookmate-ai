@@ -3,7 +3,7 @@ name="cookmate-backend"
 version="0.1.0"
 description = "backend for cookmate"
 requires-python = ">=3.13"
-dependencies = ["lancedb", "pydantic-ai", "fastapi", "uvicorn", "pydantic-ai>=0.8.1",
+dependencies = ["lancedb", "fastapi", "uvicorn", "pydantic-ai>=0.8.1",
     "python-dotenv>=1.2.2",  "sentence-transformers>=5.4.1","mlflow>=3.11.1",
     "openai>=2.32.0", "torch", "utils",]
 
@@ -17,8 +17,5 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages =  ["backend"]
+requires = ["uv_build>=0.11.13,<0.12"]
+build-backend = "uv_build"

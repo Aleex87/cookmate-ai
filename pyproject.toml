@@ -11,9 +11,6 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-cookmate-backend = { workspace = true }
-cookmate-frontend = { workspace = true }
-utils = { workspace = true }
 torch = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]
@@ -22,8 +19,9 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [tool.uv.workspace]
-members = ["src/cookmate/cookmate-frontend", "src/cookmate/cookmate-backend", "src/cookmate/utils"]
+members = ["cookmate/frontend", "cookmate/backend", "cookmate/utils"]
 
-
-[tool.hatch.build.targets.wheel]
-packages =  ["src/cookmate"]
+[tool.uv]
+dev-dependencies = [
+"ipykernel>=7.2.0",
+"pandas>=2.3.3"]
