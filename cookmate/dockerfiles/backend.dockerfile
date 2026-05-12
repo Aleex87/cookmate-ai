@@ -11,12 +11,17 @@ COPY uv.lock .
 COPY data/processed/recipes_clean.json ./data/processed/recipes_clean.json
 COPY prompts ./prompts
 COPY mlflow.db ./mlflow.db
-COPY src ./src
+COPY cookmate ./cookmate
+COPY cookmate/backend/pyproject.toml ./cookmate/backend/pyproject.toml
 
-RUN uv sync --package cookmate-backend --no-dev
+WORKDIR /app/cookmate/backend
 
-RUN uv run --package cookmate-backend python src/cookmate/setup/ingestion.py
+RUN uv sync --no-dev 
 
-WORKDIR /app/src/cookmate/cookmate-backend/backend
+WORKDIR /app
 
-CMD ["uv", "run", "--package", "cookmate-backend", "uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN uv run python -u cookmate/setup/ingestion.py
+
+WORKDIR /app/cookmate/backend
+
+CMD ["uv", "run", "uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]

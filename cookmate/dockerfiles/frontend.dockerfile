@@ -8,11 +8,14 @@ RUN pip install --no-cache-dir uv
 COPY  pyproject.toml .
 COPY  uv.lock .
 
-COPY src ./src
+COPY cookmate ./cookmate
+COPY cookmate/frontend/pyproject.toml ./cookmate/frontend/pyproject.toml
 
-RUN uv sync --package cookmate-frontend --no-dev
+WORKDIR /app/cookmate/frontend
 
-WORKDIR /app/src/cookmate/cookmate-frontend/frontend
+RUN uv sync --no-dev
+
+WORKDIR /app/cookmate/frontend/src/frontend
 
 
 

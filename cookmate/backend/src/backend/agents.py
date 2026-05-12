@@ -12,7 +12,7 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-from cookmate.backend.src.backend.data_models import RecipeRequest, RecipeResponse
+from backend.data_models import RecipeRequest, RecipeResponse
 
 _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 _db = lancedb.connect(DB_DIR)

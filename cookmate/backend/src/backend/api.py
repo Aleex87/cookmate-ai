@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 
-from cookmate.backend.src.backend.agents import generate_recipes
-from cookmate.backend.src.backend.data_models import RecipeRequest, RecipeResponse
+from backend.agents import generate_recipes
+from backend.data_models import RecipeRequest, RecipeResponse
 
 
 app = FastAPI(title="Cookmate AI")

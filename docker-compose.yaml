@@ -3,7 +3,7 @@ services:
     container_name: backend
     build:
       context: .
-      dockerfile: src/cookmate/dockerfiles/backend.dockerfile
+      dockerfile: cookmate/dockerfiles/backend.dockerfile
     env_file:
       - .env
     image: backend:v1
@@ -14,7 +14,7 @@ services:
     container_name: frontend
     build:
       context: .
-      dockerfile: src/cookmate/dockerfiles/frontend.dockerfile
+      dockerfile: cookmate/dockerfiles/frontend.dockerfile
     ports:
       - "8501:8501"
     image: frontend:v1
