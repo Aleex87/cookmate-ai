@@ -2,6 +2,8 @@
 
 A RAG-powered recipe assistant that suggests recipes based on the ingredients you have at home.
 
+**Live demo:** https://cookmate-frontend.agreeablepebble-5d90aa14.italynorth.azurecontainerapps.io/
+
 ## Demo
 
 ![Frontend streamlit](docs/frontend.png)
