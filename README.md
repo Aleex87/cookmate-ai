@@ -1,362 +1,117 @@
-# Cookmate-ai.
+# Cookmate AI
 
-## Project Structure (Working Map)
+A RAG-powered recipe assistant that suggests recipes based on the ingredients you have at home.
 
-This section describes the purpose of each file and folder.  
-Each team member can update this file from their own branch to document their work.  
-This map will be removed before final submission.
-## Git Workflow (Team Guidelines)
+## Demo
 
-Follow this workflow to avoid conflicts and keep the project clean.
+![Frontend streamlit](docs/frontend.png)
+![Backend endpoint](docs/backend.png)
+![/recipes endpoint](docs/recipes_backend.png)
+
+## Architecture
+![Structure](docs/diagram.png)
+
+The system has an offline pipeline that cleans, embeds, and stores recipes in a LanceDB vector database, and an online pipeline where the frontend sends ingredients to the backend, retrieves relevant recipes, calls the LLM via OpenRouter, and returns structured recipe suggestions.
+
+Backend and frontend run as two Docker containers, deployed on Azure Container Apps.
 
 ---
 
-### 1. Always start from an updated main
+## Tech Stack
+
+- **Backend:** FastAPI, PydanticAI
+- **Embeddings:** sentence-transformers (`all-MiniLM-L6-v2`)
+- **Vector DB:** LanceDB
+- **LLM:** OpenRouter
+- **Frontend:** Streamlit
+- **Monitoring:** MLflow
+- **Containerization:** Docker, docker-compose
+- **Deployment:** Azure Container Apps
+
+---
+
+## Setup
+
+Install dependencies:
 
 ```bash
-git checkout main
-git pull origin main
-```
-### 2. Create a new branch for your task
-
-git checkout -b feature/your-task-name
-
-### 3. 3. Work on your code
-classic 
-git add .
-git commit -m "..."
-git push origin feature/your-task-name 
-
-### 4.  Create a Pull Request (PR)
-On GitHub:
-Click "Compare & pull request"
-
-### 5. Review
-
-### 6. Merge
-
-### 7. After merge (IMPORTANT) 
-git checkout main
-git pull origin main
-
----
-
-### Root
-create a 
-.env → environment variables 
-COHERE_API_KEY=...personal key
-OPENROUTER_API_KEY= ... personal key
-
-then:
-uv sync
-I have installed the same dependences of the course including python 3.13 This installs all dependencies and makes the `cookmate` package importable from anywhere in the project.
-
----
-
-### data/
-
-data/raw/ → raw datasets 
-data/processed/ → cleaned dataset ready for ingestion  
-data/evaluation/ → evaluation samples for testing the system  
-
----
-
-### db/
-
-db/recipes.lance/ → LanceDB vector database (embedded recipes)  
-
----
-
-### notebooks/
-
-notebooks/data_curation.ipynb → dataset filtering and preprocessing  
-notebooks/exploration.ipynb → experiments and testing ideas  
-
----
-
-### prompts/
-
-prompts/recipe_agent_system_prompt.md → main system prompt for the agent  
-prompts/retrieval_evaluation_prompt.md → prompt for evaluation/testing  
-
----
-
-### mlruns/
-
-mlruns/ → MLflow tracking data (runs, logs, experiments)  
-
----
-
-### src/cookmate/
-
-__init__.py → package initialization  
-
----
-
-#### backend/
-
-api.py → FastAPI endpoints  
-agents.py → PydanticAI agent + retrieval tool  
-data_models.py → request/response models + LanceDB schema  
-constants.py → paths, model names, configuration  
-middleware.py → logging and MLflow tracing
-
-### Running the backend
-
-Start the FastAPI server locally:
-
-```bash
-uv run uvicorn cookmate.backend.api:app --reload
+uv sync --all-packages
 ```
 
-The API will be available at `http://localhost:8000`. Interactive docs 
-are at `http://localhost:8000/docs`.
+Create a `.env` file in the project root:
 
----
-
-#### frontend/
-
-app.py → Streamlit UI (user input and output display)  
-
----
-
-#### setup/
-
-prepare_dataset.py → prepare and format cleaned dataset  
-ingestion.py → create embeddings and store data in LanceDB  
-
----
-
-#### monitoring/
-
-evaluation_dataset.json → test queries for evaluation  
-monitoring.ipynb → evaluation and MLflow analysis  
-
----
-
-#### utils/
-
-config.py → environment loading and shared configuration  
-
----
-
-### tests/
-
-test_api.py → basic API tests  
-
-
-
-
-_______________________________________________________________________________________________
-## How to run section:
-
-# Link:
-
-https://cookmate-frontend.agreeablepebble-5d90aa14.italynorth.azurecontainerapps.io/
-
-
-Requirements:
-Before running make sure that have all the necessary dependencies installed:
-`uv sync --all-packages`
-
-## For Developers 
-The local vector database has been created:
-
-`uv run python src/cookmate/setup/ingestion.py`
-
-The prompt has been registered in MLflow:
-
-`uv run python src/cookmate/monitoring/mlflow_prompts.py`
-
-The .env file contains:
-
+```
 OPENROUTER_API_KEY=your_openrouter_key
+```
 
-### Run MLFlow:
-## In one terminal:
+Build the vector database:
 
-`uv run mlflow ui`
-If your port 5000 is not avalible you can use other port with the followig comand:
+```bash
+uv run python src/cookmate/setup/ingestion.py
+```
 
-`uv run mlflow ui --host 127.0.0.1 --port Port Nummer`
+Register the system prompt in MLflow:
 
-Then open:
-http://localhost:5000
+```bash
+uv run python src/cookmate/monitoring/mlflow_prompts.py
+```
 
-## In another terminal:
+---
 
-From the root:
+## Running the App
+
+**Locally:**
+
+```bash
+uv run --package cookmate-backend uvicorn backend.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+```bash
+API_URL=http://localhost:8000 uv run --package cookmate-frontend streamlit run src/cookmate/cookmate-frontend/frontend/app.py
+```
+
+**With Docker:**
+
+```bash
+docker compose up --build
+```
+
+- Frontend: `http://localhost:8501`
+- Backend docs: `http://localhost:8000/docs`
+- Health check: `http://localhost:8000/health`
+
+---
+
+## MLflow
+
+Start the MLflow UI:
+
+```bash
+uv run mlflow ui
+```
+
+If port 5000 is unavailable, specify a different port:
+
+```bash
+uv run mlflow ui --host 127.0.0.1 --port 5001
+```
+
+Run the LLM judge:
+
+```bash
 uv run python src/cookmate/monitoring/llm_judge.py
+```
 
+---
 
+## Data Pipeline
 
-## Run the FastAPI backend locally
-
-`uv run --package cookmate-backend uvicorn backend.api:app --reload --host 127.0.0.1 --port 8000`
-
-http://localhost:8000/docs
-
-## Run the Streamlit frontend locally
-
-`API_URL=http://localhost:8000 uv run --package cookmate-frontend streamlit run src/cookmate/cookmate-frontend/frontend/app.py`
-
-http://localhost:8501
-
-## Docker setup 
-
-Build and start both services frontend and backend:
-`docker compose up --build`
-
-For start the backend and the frontend together:
-`docker compose up frontend backend`
-
-Frontend: http://localhost:8501
-Backend API docs: http://localhost:8000/docs
-Health check: http://localhost:8000/health
-
-
-
-
-
-
-
-
-
-## Data Preprocessing
-
-We built a preprocessing pipeline to transform a large raw dataset into a clean and usable dataset for the RAG system.
-
-### Steps performed
-
-1. **Dataset loading**
-   - Source: RecipeNLG dataset (Kaggle)
-   - Loaded a subset for exploration
-
-2. **Column selection**
-   - Kept: `title`, `directions`, `NER`, `genre`
-   - Dropped irrelevant columns
-
-3. **Column renaming**
-   - `directions` → `instructions`
-   - `NER` → `ingredients`
-
-4. **Genre filtering**
-   - Removed: `drinks`, `fastfood`, `fusion`
-
-5. **Data conversion**
-   - Converted string fields to Python lists using `ast.literal_eval`
-
-6. **Ingredient-based filtering**
-   - Applied keyword-based filtering to keep relevant (European-style) recipes
-
-7. **Full dataset processing**
-   - Applied preprocessing to the entire dataset using chunked reading
-
-8. **Final dataset creation**
-   - Built structured JSON with:
-     - id
-     - title
-     - ingredients
-     - instructions
-     - text (combined field for embeddings)
-
-### Output
-
-Final dataset stored at:
-`data/processed/recipes_clean.json`
-
-Dataset size:
-- ~2870 recipes
-
-Note:
-- Raw dataset is not included in the repository (`data/raw/` is ignored)
-- Preprocessing is reproducible via the notebook
-- The dataset is optimized for embedding and retrieval (RAG pipeline)
-
-# Rag 
-## Overview
-
-This project implements a full RAG pipeline:
-- data preprocessing
-- vector database creation
-- semantic retrieval
-- LLM-based response generation
+The recipe dataset was curated from dataset (Kaggle): loaded, filtered by genre and ingredients, restructured, and converted into a JSON file with around 2,870 recipes. The final dataset is stored in `data/processed/recipes_clean.json` and is reproducible with `notebooks/data_curation.ipynb`.
 
 ---
 
 ## Embeddings
 
-Initial approach:
-- Cohere embeddings
-- Not scalable due to API rate limits
+We initially used Cohere embeddings but ran into rate limits during ingestion. We switched to local embeddings with sentence-transformers (`all-MiniLM-L6-v2`), which was faster and more stable for our dataset size.
 
-### Cohere embedding attempt (running)
-![Cohere Running](docs/problem_embedding_rate_limit.jpg)
-
-### Cohere embedding failure due to rate limits
-![Cohere Error](docs/embedding_faild.jpg)
-
-
-Final approach:
-- Local embeddings with SentenceTransformer (`all-MiniLM-L6-v2`)
-- Faster and stable ingestion
-
----
-
-## Vector Database
-
-- Technology: LanceDB
-- Path: `/db/recipes.lance`
-- Stores embeddings for semantic search
-
----
-
-## Retrieval
-
-- Query is converted into an embedding
-- Similar recipes are retrieved via vector similarity
-
----
-
-## Generation
-
-- LLM via OpenRouter
-- Combines:
-  - user query
-  - retrieved recipes
-
----
-
-## Architecture
-
-User Query  
-→ Embedding  
-→ Vector DB (LanceDB)  
-→ Retrieved Recipes  
-→ LLM (OpenRouter)  
-→ Response  
-
----
-
-## Notes
-
-During development, we evaluated different embedding solutions.  
-We initially attempted to use Cohere embeddings but encountered rate limits during ingestion.
-
-To address this, we switched to a local embedding model (SentenceTransformer), following best practices for scalability. AI-assisted tools were used to learn and explore this alternative solutions.
-
-
-## MLflow LLM Judge
-
-This project uses MLflow to evaluate the retrieval part of the RAG pipeline.
-
-The current evaluation flow is:
-
-ingredients
--> query embedding
--> LanceDB retrieval
--> recipe lookup from recipes_clean.json
--> structured recipe output
--> MLflow LLM judge
-
-The judge checks whether the retrieved recipes are relevant to the input ingredients and whether the output follows the expected recipe response structure.
+![Cohere rate limit](docs/problem_embedding_rate_limit.png)
